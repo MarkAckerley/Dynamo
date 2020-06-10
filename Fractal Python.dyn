@@ -1,0 +1,1379 @@
+{
+  "Uuid": "fd320e97-f127-4932-92da-d9c843a7dc1b",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Fractal Python",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Autodesk.Plane": {
+        "Key": "Autodesk.DesignScript.Geometry.Plane",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.Point": {
+        "Key": "Autodesk.DesignScript.Geometry.Point",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.DesignScript.Geometry.Point": {
+        "Key": "Autodesk.DesignScript.Geometry.Point",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.Vector": {
+        "Key": "Autodesk.DesignScript.Geometry.Vector",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.DesignScript.Geometry.Vector": {
+        "Key": "Autodesk.DesignScript.Geometry.Vector",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.DesignScript.Geometry.Plane": {
+        "Key": "Autodesk.DesignScript.Geometry.Plane",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Line": {
+        "Key": "Autodesk.DesignScript.Geometry.Line",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.Curve": {
+        "Key": "Autodesk.DesignScript.Geometry.Curve",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.DesignScript.Geometry.Curve": {
+        "Key": "Autodesk.DesignScript.Geometry.Curve",
+        "Value": "ProtoGeometry.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n##### Defnitions #####\r\n\r\n\"\"\"\r\nline = the root line object (in this case the trunk)\r\nparam = the parameter to start branching\r\nangle = the angle between new branch and last branch.\r\npercent = the percentage of the length the new branch will have from the last branch.\r\nnum = the numberof iterations\r\n\r\n\"\"\"\r\ndef FractalFunction(line, param, angle, percent, num):\r\n\t# Get the direction of this branch...\r\n\tdir = line.Direction\r\n\t# Rotate the vector about XY plane to give new branch direction...\r\n\tvec = Vector.Rotate(dir, Plane.XY(), angle)\r\n\t# Get the start location of the new branch on this branch.\r\n\tpt = Curve.PointAtParameter(line,param)\r\n\t# Create new branch...\r\n\tline = Line.ByStartPointDirectionLength(pt,vec,(line.Length / 100)*percent)\r\n\t# Add new branch to array...\r\n\tarr.append(line)\r\n\t# Decrease branch count...\r\n\tnum = num - 1\r\n\t# check if branch count is greater than 0, if so then recursively call this function passing in new branch to operate on\r\n\tif num > 0:\r\n\t\tFractalFunction(line, param, angle, percent, num)\r\n\t\tFractalFunction(line, param, -angle, percent, num)\r\n\r\ndef FractalFractal(lines, params, numF):\r\n\tfor line in lines:\r\n\t\tfor param in params:\r\n\t\t\tFractalFunction(line, param, angle, percent, num)\r\n\t\t\tFractalFunction(line, param, -angle, percent, num)\r\n\t\t\tarr.append(line)\r\n\t\t\tlines.append(line)\r\n\t\t\t\r\n\tnumF = numF - 1\t\r\n\t\r\n\tif numF > 0:\r\n\t\tFractalFractal(lines, params, numF)\t\r\n\r\n##### Inputs #####\r\n\r\nlines = IN[0]\r\nparams = IN[1]\r\nangle = IN[2]\r\npercent = IN[3]\r\nnum = IN[4]\r\nnumF = IN[4]\r\n\r\n##### Main Script #####\r\n\r\narr = []\r\n\r\nFractalFractal(lines, params, numF)\r\n\t\t\r\n\r\n##### Output #####\r\n\r\nOUT = arr ",
+      "VariableInputPorts": true,
+      "Id": "19516136eba442c284564f07f0e6a666",
+      "Inputs": [
+        {
+          "Id": "11464a251b344bb9b6e649931e022a13",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d1877d40ede84bbcba215a30f5d08702",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "80f7ae37ddb941bda58af5120a9f6bab",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "98c84bc7c09f452da37358753463db9e",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d11cc99bea71477f95724211cd4fd4a4",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cc91cd4b12fb44e386d172e9466f8317",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Point.ByCoordinates@double,double",
+      "Id": "78e173e48ae4448fb5cc441f7d5fc36b",
+      "Inputs": [
+        {
+          "Id": "571554a2280640949eeefa6f40464a6c",
+          "Name": "x",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "cb4148b5e24b4486a7dee41ddac28bd3",
+          "Name": "y",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8ca95398d91a4968bb3b56809039655d",
+          "Name": "Point",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Form a Point in the XY plane given two 2 cartesian coordinates. The Z component is 0.\n\nPoint.ByCoordinates (x: double = 0, y: double = 0): Point"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Line.ByStartPointEndPoint@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point",
+      "Id": "5e76d8ea5dab4377961e9eaf40f9ce75",
+      "Inputs": [
+        {
+          "Id": "82c09d94dcba4492bebefeb7a21c8540",
+          "Name": "startPoint",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e0d40f0b6500487188a9038b91ff7c8c",
+          "Name": "endPoint",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7926807d9b06452db9604e1be604eb57",
+          "Name": "Line",
+          "Description": "Line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Creates a straight Line between two input Points.\n\nLine.ByStartPointEndPoint (startPoint: Point, endPoint: Point): Line"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Point.ByCoordinates@double,double",
+      "Id": "3c364748712d41aea27adfe0a0679a55",
+      "Inputs": [
+        {
+          "Id": "5ecd024c74994af784450b1d3fdb6b55",
+          "Name": "x",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "08c9e42027014987a772f201eaa2cdda",
+          "Name": "y",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "67a4c653afcc4af18a54b866eb684e76",
+          "Name": "Point",
+          "Description": "Point",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Form a Point in the XY plane given two 2 cartesian coordinates. The Z component is 0.\n\nPoint.ByCoordinates (x: double = 0, y: double = 0): Point"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "MaximumValue": 40.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "InputValue": 1.0,
+      "Id": "a86a3b8d0f3f4c45bef149d2a5adc5d2",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7148fa9f78e647c5b432340834595cdc",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces numeric values."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "line;\nparam;\nangle;\npercent;\nnum;",
+      "Id": "ab913acfcfaf4deebfea2c52f5314daa",
+      "Inputs": [
+        {
+          "Id": "1abc1a303bcf47279293e33756c76502",
+          "Name": "line",
+          "Description": "line",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7e3ee82c4476428887946cb9dfe8fdee",
+          "Name": "param",
+          "Description": "param",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2fbe27c17b60434f8ad4ed8a90fd627e",
+          "Name": "angle",
+          "Description": "angle",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "35943850cbd44f439b51db2f69d5b6ad",
+          "Name": "percent",
+          "Description": "percent",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "32a9c32689c34d10a5958a15d5101a0b",
+          "Name": "num",
+          "Description": "num",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "792146e9e6af43129a420a74e76365c6",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8f332dd7e11c45c8867ceacf9518bff7",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c1a651af19fe4cbcb3b35769ebca2c47",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "32b2960ee22b4c33a1122bc21f2370b3",
+          "Name": "",
+          "Description": "Value of expression at line 4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6c018967a84b4713a6dac39d6986867b",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "MaximumValue": 1.0,
+      "MinimumValue": 0.0,
+      "StepValue": 0.1,
+      "InputValue": 1.0,
+      "Id": "93c973ad8cc64678a34819466f2b007a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "89751d7f8a5547d2b8a005a1e8115bb1",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces numeric values."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "MaximumValue": 40.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "InputValue": 40.0,
+      "Id": "c9cff69335ee410583968b942b51d69f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "adc95de984e6424f8fa48eeeb533405e",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces numeric values."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "MaximumValue": 8.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "InputValue": 0.0,
+      "Id": "c3c927ee421742beb2675f262c7c7648",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6fd8a53bc5c4432ea16911e63c410424",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces numeric values."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "// percent",
+      "Id": "f8fa96f1560a4efb9443275fe8900bd7",
+      "Inputs": [],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "// num",
+      "Id": "8c955cdcc75f48d8b24c68f70afcbc43",
+      "Inputs": [],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "// angle",
+      "Id": "411c4f2c7f2d44419cba38d13bf78b46",
+      "Inputs": [],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "MaximumValue": 40.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "InputValue": 40.0,
+      "Id": "f3e0b8f499584e32b228781655782919",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "97d157448052432f846a5a06e7a7a2e2",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces numeric values."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "// param",
+      "Id": "90e51c40a5ca419b99ad9ef2bffad29f",
+      "Inputs": [],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "// length",
+      "Id": "a0eca0b7a7254bffb228bf9c4858e500",
+      "Inputs": [],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n##### Defnitions #####\r\n\r\n\"\"\"\r\nline = the root line object (in this case the trunk)\r\nparam = the parameter to start branching\r\nangle = the angle between new branch and last branch.\r\npercent = the percentage of the length the new branch will have from the last branch.\r\nnum = the numberof iterations\r\n\r\n\"\"\"\r\ndef FractalFunction(line, mirrLine, param, angle, percent, num):\r\n\t# Get the direction of this branch...\r\n\tdir = line.Direction\r\n\torg = line.EndPoint\r\n\tzAxis = Vector.ByCoordinates(0,0,1)\r\n\tdirPerp = Vector.Rotate(dir, zAxis, 90)\r\n\tpln = Plane.ByOriginNormal(org, dirPerp)\r\n\t# Rotate the vector about XY plane to give new branch direction...\r\n\tvec = Vector.Rotate(dir, Plane.XY(), angle)\r\n\t# Get the start location of the new branch on this branch.\r\n\tpt = Curve.PointAtParameter(line,param)\r\n\t# Create new branch...\r\n\tline = Line.ByStartPointDirectionLength(pt,vec,(line.Length / 100)*percent)\r\n\tlineMirr = \tGeometry.Mirror(line, pln)\r\n\t# Add new branch to array...\r\n\tarr.append(line)\r\n\tarr.append(lineMirr)\r\n\t# Decrease branch count...\r\n\tnum = num - 1\r\n\t# check if branch count is greater than 0, if so then recursively call this function passing in new branch to operate on\r\n\tif num > 0:\r\n\t\tFractalFunction(line, mirrLine, param, angle, percent, num)\t\r\n\r\n\r\n\r\n##### Inputs #####\r\nline = IN[0]\r\nmirrLine = IN[0]\r\nparam = IN[1]\r\nangle = IN[2]\r\npercent = IN[3]\r\nnum = IN[4]\r\n\r\n##### Main Script #####\r\n\r\narr = []\r\nFractalFunction(line, mirrLine, param, angle, percent, num)\r\n\r\n##### Output #####\r\n\r\nOUT = arr",
+      "VariableInputPorts": true,
+      "Id": "a1dd717a2d9049f99c834cd47ce71a18",
+      "Inputs": [
+        {
+          "Id": "1e4752bfb65b45cd9f03a470938fa123",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "cef70da97858404b90674cfbc3c48ee6",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f73e3f62523f4f6e8bf82ed2e298035d",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1504b9c6f32f4d9ab4c6ebe0ce2a739c",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b13d96d28ad0432da1a7f4bb847acdcb",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "692b8dbb97b345689ec493dcaa20057e",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n##### Defnitions #####\r\n\r\n\"\"\"\r\nline = the root line object (in this case the trunk)\r\nparam = the parameter to start branching\r\nangle = the angle between new branch and last branch.\r\npercent = the percentage of the length the new branch will have from the last branch.\r\nnum = the numberof iterations\r\n\r\n\"\"\"\r\ndef FractalFunction(line, param, angle, percent, num):\r\n\t# Get the direction of this branch...\r\n\tdir = line.Direction\r\n\t# Rotate the vector about XY plane to give new branch direction...\r\n\tvec = Vector.Rotate(dir, Plane.XY(), angle)\r\n\t# Get the start location of the new branch on this branch.\r\n\tpt = Curve.PointAtParameter(line,param)\r\n\t# Create new branch...\r\n\tline = Line.ByStartPointDirectionLength(pt,vec,(line.Length / 100)*percent)\r\n\t# Add new branch to array...\r\n\tarr.append(line)\r\n\t# Decrease branch count...\r\n\tnum = num - 1\r\n\t# check if branch count is greater than 0, if so then recursively call this function passing in new branch to operate on\r\n\tif num > 0:\r\n\t\tFractalFunction(line, param, angle, percent, num)\t\r\n\t\tFractalFunction(line, param, -angle, percent, num)\r\n\t\r\n##### Inputs #####\r\n\r\nline = IN[0]\r\nparam = IN[1]\r\nangle = IN[2]\r\npercent = IN[3]\r\nnum = IN[4]\r\n\r\n##### Main Script #####\r\n\r\narr = []\r\n\r\narr.append(line)\r\nFractalFunction(line, param, angle, percent, num)\r\nFractalFunction(line, param, -angle, percent, num)\r\n\r\n##### Output #####\r\n\r\nOUT = arr ",
+      "VariableInputPorts": true,
+      "Id": "1862febe802040fe8faf6b2cc956a9a2",
+      "Inputs": [
+        {
+          "Id": "fa7f1669ce3d48ea9924185ec10e130c",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8e1ab82dae42484bb5ea7d5d554f0af4",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "44d71ee479ca462d9184a67de8e22521",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "37a8bc67ed194fc88d9b0490ae101804",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bcb9541aac784ffb9f18c60d27fef257",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "459f754c3d834080b7791ee65c928656",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "0..1..#6;",
+      "Id": "293d239c4fbf494c9011ab662efa3c2c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "69742da608a145c68f1fd6b5f3b5dd93",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.DropItems@var[]..[],int",
+      "Id": "744b282d5f9f40d09ddc3e77e5d720d8",
+      "Inputs": [
+        {
+          "Id": "633de54bdedb4a7091e542278d96b970",
+          "Name": "list",
+          "Description": "List to remove items from.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9f9a3b0eb636455ea84c8e535c166d74",
+          "Name": "amount",
+          "Description": "Amount of items to remove. If negative, items are removed from the end of the list.\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e1daaeefe47148e28e60def54194c2c2",
+          "Name": "list",
+          "Description": "List of remaining items.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Removes an amount of items from the start of the list. If the amount is a negative value, items are removed from the end of the list.\n\nList.DropItems (list: var[]..[], amount: int): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "1;",
+      "Id": "ceda54ee35c54c34ba572b4198d5244c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5fe0b1b7d3c54f0a827da66b662cdab8",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n##### Defnitions #####\r\n\r\n\"\"\"\r\nline = the root line object (in this case the trunk)\r\nparam = the parameter to start branching\r\nangle = the angle between new branch and last branch.\r\npercent = the percentage of the length the new branch will have from the last branch.\r\nnum = the numberof iterations\r\n\r\n\"\"\"\r\ndef FractalFunction(lines, param, angle, percent, num):\r\n\t# Get the direction of this branch...\r\n\tlines = []\r\n\tfor line in lines:\r\n\t\tdir = line.Direction\r\n\t\t# Rotate the vector about XY plane to give new branch direction...\r\n\t\tvec = Vector.Rotate(dir, Plane.XY(), angle)\r\n\t\tfor p in param:\r\n\t\t\t# Get the start location of the new branch on this branch.\r\n\t\t\tpoint = Curve.PointAtParameter(line,p)\r\n\t\t\t# Create new branch...\r\n\t\t\tlines.append(Line.ByStartPointDirectionLength(point,vec,(line.Length / 100)*percent))\r\n\t\t\t# Add new branch to array...\r\n\t\tarr.extend(lines)\r\n\t# Decrease branch count...\r\n\tnum = num - 1#\r\n\t# check if branch count is greater than 0, if so then recursively call this function passing in new branch to operate on\r\n\tif num > 0:\r\n\t\tFractalFunction(lines, param, angle, percent, num)\t\r\n\t\tFractalFunction(lines, param, -angle, percent, num)\r\n\t\r\n##### Inputs #####\r\n\r\nlines = IN[0]\r\nparam = IN[1]\r\nangle = IN[2]\r\npercent = IN[3]\r\nnum = IN[4]\r\n\r\n##### Main Script #####\r\n\r\narr = []\r\n\r\narr.append(lines)\r\n\r\nFractalFunction(lines, param, angle, percent, num)\r\nFractalFunction(lines, param, -angle, percent, num)\r\n\r\n##### Output #####\r\n\r\nOUT = arr ",
+      "VariableInputPorts": true,
+      "Id": "cda80abf83c14df6aa68d7482510678d",
+      "Inputs": [
+        {
+          "Id": "f18918928ea64e719ac30445d5a354de",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7e3ef2f310d744a0aa769033f54129b2",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f8d1c960b8d346ebb90560f63265e23c",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "aee463f1f40f4dde837063c46a8cd037",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9ba2ac6ee21a4737ac0a6b24e47b5d15",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6a70ec0122354ba2b12d8c0345f0bc95",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[x];",
+      "Id": "35a476f02afe4b048a6c8858d7f5de15",
+      "Inputs": [
+        {
+          "Id": "e463b9f1c39648eb95caf485130dcee7",
+          "Name": "x",
+          "Description": "x",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "78afad83860746a8ac007f8051ef8712",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n\r\nimport time\r\n\r\n\r\n##### Defnitions #####\r\n\r\n\"\"\"\r\nline = the root line object (in this case the trunk)\r\nparam = the parameter to start branching\r\nangle = the angle between new branch and last branch.\r\npercent = the percentage of the length the new branch will have from the last branch.\r\nnum = the numberof iterations\r\n\r\n\"\"\"\r\ndef FractalFunction(line, param, angle, percent, num):\r\n\t# Get the direction of this branch...\r\n\tdir = line.Direction\r\n\t# Rotate the vector about XY plane to give new branch direction...\r\n\tvec = Vector.Rotate(dir, Plane.XY(), angle)\r\n\tlines = []\r\n\tfor p in param:\r\n\t\t# Get the start location of the new branch on this branch.\r\n\t\tpoint = Curve.PointAtParameter(line,p)\r\n\t\t# Create new branch...\r\n\t\tlines.append(Line.ByStartPointDirectionLength(point,vec,(line.Length / 100)*percent))\r\n\t\t# Add new branch to array...\r\n\t\tarr.extend(lines)\r\n\t# Decrease branch count...\r\n\tnum = num - 1#\r\n\t# check if branch count is greater than 0, if so then recursively call this function passing in new branch to operate on\r\n\tif num > 0:\r\n\t\tFractalFunction(line, param, angle, percent, num)\t\r\n\t\tFractalFunction(line, param, -angle, percent, num)\r\n\r\ndef FractalFractal(line, param, numF):\r\n\r\n\tstart_time =time.time()\r\n\ti=0\r\n\tresult=[]\r\n\tss=time.time()-start_time\r\n\twhile ss<60:\r\n\t\tresult.append(i)\r\n\t\ti+=1\r\n\t\t#do something\r\n\t\tss=time.time()-start_time\r\n\r\n\t\tfor line in lines:\r\n\t\t\tFractalFunction(line, param, angle, percent, num)\r\n\t\t\tFractalFunction(line, param, -angle, percent, num)\r\n\t\t\tnumF = numF - 1\r\n\t\t\tlines.append(line)\r\n\t\t\r\n\t\tif numF > 0:\r\n\t\t\tFractalFractal(line, param, numF)\r\n\r\n##### Inputs #####\r\n\r\nlines = IN[0]\r\nparam = IN[1]\r\nangle = IN[2]\r\npercent = IN[3]\r\nnum = IN[4]\r\nnumF = IN[4]\r\n\r\n##### Main Script #####\r\narr = []\r\nFractalFractal(lines, param, numF)\r\n\r\n##### Output #####\r\n\r\nOUT = arr ",
+      "VariableInputPorts": true,
+      "Id": "c64ba048ca3946a4a196228bdf54b1d8",
+      "Inputs": [
+        {
+          "Id": "b5197f8ca23844bb9024daa4f5a4a40e",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "186c4cdc1d8f4ce1a62a1b1c6dadc17a",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "70f9d047546e4144a2fab1a6aa157093",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "672f98391c1b4a388eecd8554678d1b8",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d1542b7539a74f21835ac58b73f141b7",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6a04a996b78c4785bb295c430c5c6d92",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n##### Defnitions #####\r\n\r\n\"\"\"\r\nline = the root line object (in this case the trunk)\r\nparam = the parameter to start branching\r\nangle = the angle between new branch and last branch.\r\npercent = the percentage of the length the new branch will have from the last branch.\r\nnum = the numberof iterations\r\n\r\n\"\"\"\r\ndef FractalFunction(line, param, angle, percent, num):\r\n\t# Get the direction of this branch...\r\n\tdir = line.Direction\r\n\t# Rotate the vector about XY plane to give new branch direction...\r\n\tvec = Vector.Rotate(dir, Plane.XY(), angle)\r\n\tlines = []\r\n\tfor p in param:\r\n\t\t# Get the start location of the new branch on this branch.\r\n\t\tpoint = Curve.PointAtParameter(line,p)\r\n\t\t# Create new branch...\r\n\t\tlines.append(Line.ByStartPointDirectionLength(point,vec,(line.Length / 100)*percent))\r\n\t\t# Add new branch to array...\r\n\tarray.extend(lines)\r\n\t# Decrease branch count...\r\n\tnum = num - 1\r\n\t# check if branch count is greater than 0, if so then recursively call this function passing in new branch to operate on\r\n\tif num > 0:\r\n\t\tFractalFunction(line, param, angle, percent, num)\t\r\n\t\tFractalFunction(line, param, -angle, percent, num)\r\n\r\n\r\ndef FractalFractal(array, number):\r\n\tfor a in array: \r\n\t\tFractalFunction(a, param, angle, percent, number)\r\n\t\tFractalFunction(a, param, -angle, percent, number)\r\n\t\t\r\n\tnumber = number - 1\r\n\t\r\n\tif number > 0:\r\n\t\tFractalFractal(array, number)\r\n\r\n##### Inputs #####\r\n\r\narray = IN[0]\r\nparam = IN[1]\r\nangle = IN[2]\r\npercent = IN[3]\r\nnum = IN[4]\r\nnumF = IN[4]\r\n\r\n##### Main Script #####\r\n\r\nFractalFractal(array, numF)\r\n\r\n\r\n##### Output #####\r\n\r\nOUT = array",
+      "VariableInputPorts": true,
+      "Id": "5013d3da65b84782ac2a454d8cc5bc17",
+      "Inputs": [
+        {
+          "Id": "29a49a74235f48b7a7979c2c9acfb94f",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "299fc01a080f4ddf90b995530d47dfc0",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "87a82d4f382f45e39dca402c575f8942",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f68302ce59e1407f911f420bf079264e",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e4a2fea97f6844aaa2e62376c7548559",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6e93ed89b42a4d99ad6e2d3ab0d6f692",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n##### Defnitions #####\r\n\r\n\"\"\"\r\nline = the root line object (in this case the trunk)\r\nparam = the parameter to start branching\r\nangle = the angle between new branch and last branch.\r\npercent = the percentage of the length the new branch will have from the last branch.\r\nnum = the numberof iterations\r\n\r\n\"\"\"\r\ndef FractalFunction(line, param, angle, percent, num):\r\n\t# Get the direction of this branch...\r\n\tdir = line.Direction\r\n\t# Rotate the vector about XY plane to give new branch direction...\r\n\tvec = Vector.Rotate(dir, Plane.XY(), angle)\r\n\tlines = []\r\n\tfor p in param:\r\n\t\t# Get the start location of the new branch on this branch.\r\n\t\tpoint = Curve.PointAtParameter(line,p)\r\n\t\t# Create new branch...\r\n\t\tlines.append(Line.ByStartPointDirectionLength(point,vec,(line.Length / 100)*percent))\r\n\t\t# Add new branch to array...\r\n\tarr.extend(lines)\r\n\t# Decrease branch count...\r\n\tnum = num - 1\r\n\t# check if branch count is greater than 0, if so then recursively call this function passing in new branch to operate on\r\n\tif num > 0:\r\n\t\tFractalFunction(line, param, angle, percent, num)\t\r\n\t\tFractalFunction(line, param, -angle, percent, num)\r\n\r\n\r\ndef FractalFractal(array):\r\n\tfor a in array: \r\n\t\tFractalFunction(a, param, angle, percent, numF)\r\n\t\tFractalFunction(a, param, -angle, percent, numF)\r\n\t\t\r\n\tnumF = numF - 1\r\n\t\r\n\tif num > 0:\r\n\t\tFractalFunction(a, param, angle, percent, numF)\t\r\n\t\tFractalFunction(a, param, -angle, percent, numF)\r\n\r\n##### Inputs #####\r\n\r\nline = IN[0]\r\nparam = IN[1]\r\nangle = IN[2]\r\npercent = IN[3]\r\nnum = IN[4]\r\nnumF = IN[4]\r\n\r\n##### Main Script #####\r\n\r\narr = []\r\nFractalFractal(arr)\r\n\r\n\r\n\r\n##### Output #####\r\n\r\nOUT = arr ",
+      "VariableInputPorts": true,
+      "Id": "87dbcaa3af754b678c0cf73b355c2da9",
+      "Inputs": [
+        {
+          "Id": "cdb9c0cc3dc24914a5f9f7677cbfd185",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b2c707c253e742abb0a497b11d958271",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7076f36e1f81431f914cb394f6d1a289",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a53aab0ce989451e9d44e807d8c25c11",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5a1e16e936ad4ac8bbe8256f2832948b",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ff8b0f50f2684548bf936682650f22c2",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "8ca95398d91a4968bb3b56809039655d",
+      "End": "82c09d94dcba4492bebefeb7a21c8540",
+      "Id": "3dd39a2e4c244bd68946893cdc8c57e5"
+    },
+    {
+      "Start": "7926807d9b06452db9604e1be604eb57",
+      "End": "e463b9f1c39648eb95caf485130dcee7",
+      "Id": "b34be295fc6145989679fa91c1b53a05"
+    },
+    {
+      "Start": "67a4c653afcc4af18a54b866eb684e76",
+      "End": "e0d40f0b6500487188a9038b91ff7c8c",
+      "Id": "b3808f1773534b679cb909610318272f"
+    },
+    {
+      "Start": "7148fa9f78e647c5b432340834595cdc",
+      "End": "08c9e42027014987a772f201eaa2cdda",
+      "Id": "311368a2d00240faabb13fd3534c896f"
+    },
+    {
+      "Start": "792146e9e6af43129a420a74e76365c6",
+      "End": "29a49a74235f48b7a7979c2c9acfb94f",
+      "Id": "85a1cc6463ba41a786945bf3b0fbce75"
+    },
+    {
+      "Start": "8f332dd7e11c45c8867ceacf9518bff7",
+      "End": "299fc01a080f4ddf90b995530d47dfc0",
+      "Id": "5bbb4536ed364f12a1372c242a801d11"
+    },
+    {
+      "Start": "c1a651af19fe4cbcb3b35769ebca2c47",
+      "End": "87a82d4f382f45e39dca402c575f8942",
+      "Id": "efd3fc7ebf7248ebbcf0977f14f38913"
+    },
+    {
+      "Start": "32b2960ee22b4c33a1122bc21f2370b3",
+      "End": "f68302ce59e1407f911f420bf079264e",
+      "Id": "2983a309f6d24660afbdc0a63e20b960"
+    },
+    {
+      "Start": "6c018967a84b4713a6dac39d6986867b",
+      "End": "e4a2fea97f6844aaa2e62376c7548559",
+      "Id": "eb87efbf871f46b6a1af4c4e210d931c"
+    },
+    {
+      "Start": "adc95de984e6424f8fa48eeeb533405e",
+      "End": "35943850cbd44f439b51db2f69d5b6ad",
+      "Id": "e2e71f44d2674eb5abab4700b453e73f"
+    },
+    {
+      "Start": "6fd8a53bc5c4432ea16911e63c410424",
+      "End": "32a9c32689c34d10a5958a15d5101a0b",
+      "Id": "8bdaf2aa7c524c7989cda3a50d044454"
+    },
+    {
+      "Start": "97d157448052432f846a5a06e7a7a2e2",
+      "End": "2fbe27c17b60434f8ad4ed8a90fd627e",
+      "Id": "fbf82b6784cc4360b3eed44fe0d8496c"
+    },
+    {
+      "Start": "69742da608a145c68f1fd6b5f3b5dd93",
+      "End": "633de54bdedb4a7091e542278d96b970",
+      "Id": "b27a65a0d47c4edfbddc823ae43cf095"
+    },
+    {
+      "Start": "e1daaeefe47148e28e60def54194c2c2",
+      "End": "7e3ee82c4476428887946cb9dfe8fdee",
+      "Id": "a1d8e211922b431e85c16c6bd31ade0b"
+    },
+    {
+      "Start": "5fe0b1b7d3c54f0a827da66b662cdab8",
+      "End": "9f9a3b0eb636455ea84c8e535c166d74",
+      "Id": "beea70aea8554f77a839c4abbda8fd65"
+    },
+    {
+      "Start": "78afad83860746a8ac007f8051ef8712",
+      "End": "1abc1a303bcf47279293e33756c76502",
+      "Id": "711320ac84e04f62b787335a87f0a222"
+    }
+  ],
+  "Dependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.3.8810",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": 0.99934020313446315,
+      "EyeY": 1.6399792967279794,
+      "EyeZ": -0.047143679593895094,
+      "LookX": -0.58773458062614026,
+      "LookY": -3.1268185316914332,
+      "LookZ": -1.0910565524490725,
+      "UpX": -0.39317236805117445,
+      "UpY": 0.55919290347075534,
+      "UpZ": -0.72987587006901544
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "19516136eba442c284564f07f0e6a666",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 1293.07531718854,
+        "Y": -225.87609221400081
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Point.ByCoordinates",
+        "Id": "78e173e48ae4448fb5cc441f7d5fc36b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 25.115120394027826,
+        "Y": 110.06471908060178
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Line.ByStartPointEndPoint",
+        "Id": "5e76d8ea5dab4377961e9eaf40f9ce75",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 265.0,
+        "Y": 102.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Point.ByCoordinates",
+        "Id": "3c364748712d41aea27adfe0a0679a55",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 18.424479673758924,
+        "Y": -23.636496622930224
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Number Slider",
+        "Id": "a86a3b8d0f3f4c45bef149d2a5adc5d2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -322.57552032624108,
+        "Y": 3.363503377069776
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "ab913acfcfaf4deebfea2c52f5314daa",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 769.93780616735,
+        "Y": 106.9217650738122
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Number Slider",
+        "Id": "93c973ad8cc64678a34819466f2b007a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -300.25777912017293,
+        "Y": 435.35377217894739
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Number Slider",
+        "Id": "c9cff69335ee410583968b942b51d69f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -298.08799517030752,
+        "Y": 791.57295284324232
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Number Slider",
+        "Id": "c3c927ee421742beb2675f262c7c7648",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -294.05218504096547,
+        "Y": 992.94235407320161
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "f8fa96f1560a4efb9443275fe8900bd7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -304.86955435895618,
+        "Y": 703.67462006820131
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "8c955cdcc75f48d8b24c68f70afcbc43",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -296.89707349139985,
+        "Y": 910.37797891145965
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "411c4f2c7f2d44419cba38d13bf78b46",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -305.29077708990781,
+        "Y": 511.91537292417081
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Number Slider",
+        "Id": "f3e0b8f499584e32b228781655782919",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -310.2179513419004,
+        "Y": 601.20750621954858
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "90e51c40a5ca419b99ad9ef2bffad29f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -298.76410068359507,
+        "Y": 337.82313275969011
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "a0eca0b7a7254bffb228bf9c4858e500",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -316.59484797405025,
+        "Y": -95.142265824564362
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "a1dd717a2d9049f99c834cd47ce71a18",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 909.35778612742024,
+        "Y": -217.95763147670237
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "1862febe802040fe8faf6b2cc956a9a2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 1101.2333721667728,
+        "Y": -225.22764896089112
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "293d239c4fbf494c9011ab662efa3c2c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -339.51203448094634,
+        "Y": 238.89891094199248
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.DropItems",
+        "Id": "744b282d5f9f40d09ddc3e77e5d720d8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -147.38112129698641,
+        "Y": 235.02536973331632
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "ceda54ee35c54c34ba572b4198d5244c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -252.86070013584242,
+        "Y": 316.3574031259335
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "cda80abf83c14df6aa68d7482510678d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 1472.8698163419128,
+        "Y": -240.4057618304461
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "35a476f02afe4b048a6c8858d7f5de15",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 545.96999141920639,
+        "Y": 37.876409042700971
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "c64ba048ca3946a4a196228bdf54b1d8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 1643.4140705924819,
+        "Y": -252.54434023502205
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "5013d3da65b84782ac2a454d8cc5bc17",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1046.1273972528463,
+        "Y": 70.3009468357765
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "87dbcaa3af754b678c0cf73b355c2da9",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 1843.3744622799998,
+        "Y": -255.51463453376797
+      }
+    ],
+    "Annotations": [],
+    "X": -970.02435658789261,
+    "Y": 144.10692807084132,
+    "Zoom": 1.1945204566436223
+  }
+}
