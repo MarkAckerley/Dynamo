@@ -1,2 +1,2 @@
 # Dynamo
-MindDump
+A few more interesting and useful dyns
